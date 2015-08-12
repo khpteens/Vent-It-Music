@@ -41,7 +41,8 @@ var bgGame,
 	hitGoal_txt,
 	sw, sw2, sb,
 	lastX = 0,
-	lastY = 500;
+	lastY = 500,
+	stick;
 
 var audioLength = 100,
 	audioFileName,
@@ -49,7 +50,8 @@ var audioLength = 100,
 	averages = [],
 	volumes = [],
 	all = [],
-	guitarLoop;
+	guitarLoop,
+	drumswing;
 
 
 /********************************************************************/
@@ -64,13 +66,13 @@ Vent.Drum.prototype = {
 		bgGame = this.game.add.sprite(this.game.width / 2, this.game.height / 2, "crowd");
 		bgGame.width = this.game.world.width;
 		bgGame.height = this.game.world.height;
-		bgGame.scale.set(1.2);		
-		bgGame.anchor.set(0.5);		
-		bg_drum_group.add(bgGame);	
-		bgGame.bringToTop();	
+		bgGame.scale.set(1.2);
+		bgGame.anchor.set(0.5);
+		bg_drum_group.add(bgGame);
+		bgGame.bringToTop();
 
 		createCopyright();
-		createDrumAudio();	
+		createDrumAudio();
 		createDrumUI();
 
 		pop = Vent.game.add.sprite(Vent.game.width / 2, Vent.game.height / 2, "circle");
@@ -101,7 +103,7 @@ function createDrumWorldSettings() {
 
 function createDrumUI() {
 	createDrumInputListeners();
-	createDrumButtons();	
+	createDrumButtons();
 }
 
 function createDrumInputListeners() {
@@ -128,7 +130,7 @@ function createDrumInputListeners() {
 		} else if (swipeCoordY2 > swipeCoordY + swipeMinDistance) {
 			// console.log("down");
 		}
-		
+
 	}, this);
 }
 
@@ -147,7 +149,7 @@ function createDrumButtons() {
 	createDrums();
 }
 
-function createDrums() {  
+function createDrums() {	
 
 	var d2 = Vent.game.add.sprite(Vent.game.width / 2 - 75, Vent.game.height / 2 + 75, "drum-snare");
 	createDrum(d2);
@@ -158,14 +160,14 @@ function createDrums() {
 	buttons.add(d2);
 
 	var d3 = Vent.game.add.sprite(Vent.game.width / 2 + 75, Vent.game.height / 2 - 75, "drum-small");
-	createDrum(d3);	
+	createDrum(d3);
 	d3.anchor.set(0.25, 0.75);
 	d3.events.onInputDown.add(function() {
 		playDrumAudio(beat3);
 	});
 	buttons.add(d3);
 
-	var d4 = Vent.game.add.sprite(Vent.game.width / 2 + 75, Vent.game.width / 2 + 160, "drum-large");
+	var d4 = Vent.game.add.sprite(Vent.game.width / 2 + 75, Vent.game.width / 2 + 120, "drum-large");
 	createDrum(d4);
 	d4.anchor.set(0.25);
 	d4.events.onInputDown.add(function() {
@@ -177,14 +179,19 @@ function createDrums() {
 	createDrum(d1);
 	d1.anchor.set(0.75);
 	d1.events.onInputDown.add(function() {
-		playDrumAudio(beat1);  
+		playDrumAudio(beat1);
 	});
 	buttons.add(d1);
+
+	stick = Vent.game.add.sprite(0, 0, "drumstick");
+	stick.scale.set(0.75);
+	stick.anchor.set(1, 0.5);
+	stick.visible = false;
 }
 
 function createDrum(button) {
 
-	button.w = button.width; 
+	button.w = button.width;
 	button.h = button.height;
 
 	button.inputEnabled = true;
@@ -217,12 +224,43 @@ function createDrum(button) {
 		button.alpha = 0.5;
 
 		create_bg_pop(Vent.game.input.activePointer.x, Vent.game.input.activePointer.y, myTint);
+		createStickAnimation(Vent.game.input.activePointer.x, Vent.game.input.activePointer.y);
 	});
 
 	button.events.onInputUp.add(function() {
 		button.alpha = 1;
 		button.tint = 0xffffff;
 	});
+}
+
+function createStickAnimation(x, y) {
+
+	stick.visible = true;
+
+	if(drumswing) drumswing.stop();
+
+	if (x <= Vent.game.width / 2) {
+		stick.scale.set(-0.75);
+		angleMod = -100;
+	} else {
+		stick.scale.set(0.75);
+		angleMod = 100;
+	}
+
+	stick.angle = 0;
+	stick.x = x + stick.width;
+	stick.y = y;
+
+	drumswing = Vent.game.add.tween(stick);
+	drumswing.to({
+		angle: stick.angle + angleMod
+	}, 400, Phaser.Easing.Quadratic.InOut);
+
+	// on complete hide stick
+	drumswing.onComplete.addOnce(function() {
+		stick.visible = false;
+	}, this);
+	drumswing.start();
 }
 
 function createDrumAudio() {
@@ -249,12 +287,12 @@ function createDrumVisualization() {
 	sb.height = Vent.game.height;
 	sb.anchor.set(0.5);
 	sb.tint = 0x444444;
-	bg_drum_group.add(sb);	
+	bg_drum_group.add(sb);
 }
 
 function playDrumAudio(mysound) {
 
-	if (settings.SOUND_ON && settings.VOLUME > 0) {		
+	if (settings.SOUND_ON && settings.VOLUME > 0) {
 		mysound.play();
 		mysound.frame = 0;
 		playing.push(mysound);
@@ -273,7 +311,7 @@ function drumExit() {
 
 		// reset game
 		hitTotal = 0;
-		destroyAllHits();		
+		destroyAllHits();
 
 		// go to Finish screen
 		Vent.game.stateTransition.to("Finish");

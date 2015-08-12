@@ -32,7 +32,7 @@ if (settings.RATIO <= settings.RATIO_MIN) {
 settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
 var copyright_txt = "© BroTalk",
-	release_txt = "Release.Candidate.Aug.12.2015";
+	release_txt = "RC.Aug.12.2015";
 
 
 // FUNCTIONS ***********************************************	

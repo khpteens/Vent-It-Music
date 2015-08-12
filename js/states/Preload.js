@@ -49,6 +49,7 @@ Vent.Preload.prototype = {
 		this.load.image('drum-snare', 'assets/img/drum-snare.png');
 		this.load.image('drum-small', 'assets/img/drum-small.png');
 		this.load.image('drum-large', 'assets/img/drum-large.png');
+		this.load.image('drumstick', 'assets/img/drumstick.png');
 
 		// icons & emojis
 		this.load.image('emoji1', 'assets/img/emoji1.png');
