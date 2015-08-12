@@ -13,7 +13,8 @@ var settings = {
 	"ANALYTICS_ON": false,
 
 	"SOUND_ON": true,
-	"VOLUME": 0.2,
+	"VOLUME": 0.5,
+	"LOOP": undefined,
 
 	"FULLSCREEN": false,
 
@@ -61,10 +62,10 @@ function createBG(color, bg) {
 	bg_group.add(bg);
 
 	var st = Vent.game.state.getCurrentState().key;
-	if(st != "Preload" && st != "Guitar" && st != "Drum"){
+	if (st != "Preload" && st != "Guitar" && st != "Drum") {
 		var bg_image = Vent.game.add.sprite(Vent.game.width / 2, Vent.game.height / 2, "crowd");
 		bg_image.width = Vent.game.width;
-		bg_image.height = Vent.game.height;		
+		bg_image.height = Vent.game.height;
 		bg_image.anchor.set(0.5);
 		bg_image.scale.set(1.2);
 		// bg_image.tint = color;
@@ -74,7 +75,7 @@ function createBG(color, bg) {
 
 function createBt(button, label_text, target_state, shape, iconImage) {
 
-	if (!label_text) label_text = "";	
+	if (!label_text) label_text = "";
 	if (!shape) shape = "default";
 
 	// sprite parameters	
@@ -94,7 +95,7 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 	button.alpha = 0;
 
 	// add border
-	var border = Vent.game.add.graphics(0, 0);	
+	var border = Vent.game.add.graphics(0, 0);
 	border.lineStyle(2, 0xffffff, 1);
 	if (shape == "circle") {
 		// border.drawCircle(button.x, button.y, button.width, button.height);
@@ -108,10 +109,10 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 
 	// add label
 	var label;
-	if (label_text.indexOf("icon") == -1){
+	if (label_text.indexOf("icon") == -1) {
 		label = Vent.game.add.text(button.x, button.y + 3, label_text.toUpperCase(), button_style);
 		label.lineSpacing = -5;
-	}else{
+	} else {
 		label = Vent.game.add.sprite(button.x, button.y, label_text);
 		label.width = 25;
 		label.height = 25;
@@ -126,7 +127,7 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 		icon.anchor.set(0.5);
 		icon.height = button.height - iconMod;
 		icon.width = button.height - iconMod;
-		button.icon = icon;		
+		button.icon = icon;
 	}
 
 
@@ -141,9 +142,9 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 			// width: button.w + 10,
 			// height: button.h + 10,
 			alpha: 1
-		}, 200, Phaser.Easing.Quadratic.Out, true);		
-		button.label.tint = 0x000000;		
-		
+		}, 200, Phaser.Easing.Quadratic.Out, true);
+		button.label.tint = 0x000000;
+
 	}, this);
 	button.events.onInputOut.add(function() {
 		// button.tint = noColour;
@@ -159,9 +160,9 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 	button.events.onInputDown.add(function() {
 		button.tint = 0x4ac7eb;
 	});
-	button.events.onInputUp.add(function() {		
-		button.tint = 0xffffff;		
-	});	
+	button.events.onInputUp.add(function() {
+		button.tint = 0xffffff;
+	});
 }
 
 function createCopyright() {
@@ -172,21 +173,21 @@ function createCopyright() {
 
 	// release	
 	var release = Vent.game.add.text(10, Vent.game.height, release_txt, copyright_style);
-	release.anchor.set(0,1);
+	release.anchor.set(0, 1);
 
 	// soundBt
 	var soundBt = Vent.game.add.sprite(Vent.game.width / 2 - 40, 29, "square");
 	createBt(soundBt, "icon-note", false, "circle");
 	soundBt.events.onInputUp.add(function() {
 		soundToggle();
-	});	
+	});
 
 	// fullscreenBt
 	var fullscreenBt = Vent.game.add.sprite(Vent.game.width / 2 + 40, 29, "square");
 	createBt(fullscreenBt, "icon-expand", false, "circle");
 	fullscreenBt.events.onInputUp.add(function() {
 		fullscreenToggle();
-	});	
+	});
 }
 
 function openInNewTab(url) {
@@ -198,13 +199,14 @@ function soundToggle() {
 
 	if (!settings.SOUND_ON) {
 		settings.SOUND_ON = true;
-		settings.VOLUME = 0.2;
-		Phaser.game.VOLUME = 1;
+		settings.VOLUME = 0.5;
 	} else {
-		settings.SOUND_ON = false,
+		settings.SOUND_ON = false;
 		settings.VOLUME = 0;
-		Phaser.game.VOLUME = 0;
 	}
+
+	if (guitarLoop != undefined) guitarLoop.volume = settings.VOLUME;
+	if (drumLoop != undefined) drumLoop.volume = settings.VOLUME;
 }
 
 function fullscreenToggle() {

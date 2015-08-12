@@ -368,8 +368,9 @@ function createGuitarAudio() {
 	
 	drumLoop = Vent.game.add.audio('drumLoop');	
 	drumLoop.loop = true;
-	drumLoop.volume = 0.5;
+	drumLoop.volume = settings.VOLUME;
 	drumLoop.play();
+	settings.LOOP = drumLoop;	
 }
 
 function createGuitarVisualization() {
