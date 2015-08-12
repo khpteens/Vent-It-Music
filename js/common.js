@@ -1,4 +1,40 @@
-// Utility.js holds utility functions
+// Common.js holds utility functions & settings
+
+// VARIABLES ***********************************************
+
+var settings = {
+	"WIDTH": 500,
+	"HEIGHT": undefined,
+	"RATIO": window.innerHeight / window.innerWidth,
+	"RATIO_MIN": 1.2,
+
+	"PAUSED": false,
+
+	"ANALYTICS_ON": false,
+
+	"SOUND_ON": true,
+	"VOLUME": 0.2,
+
+	"FULLSCREEN": false,
+
+	"CONTAINER": "game",
+	"FRAME": document.getElementById("game"),
+	"ELEMENT": document.querySelector('#game'),
+	"FRAME_WIDTH": Number(window.getComputedStyle(document.querySelector('#game')).width.replace(/\D/g, '')),
+	"FRAME_HEIGHT": Number(window.getComputedStyle(document.querySelector('#game')).height.replace(/\D/g, ''))
+};
+
+if (settings.RATIO <= settings.RATIO_MIN) {
+	settings.RATIO = settings.RATIO_MIN; // widest is square, no limit to height
+}
+
+settings.HEIGHT = settings.RATIO * settings.WIDTH;
+
+var copyright_txt = "© BroTalk",
+	release_txt = "Release.Candidate.Aug.12.2015";
+
+
+// FUNCTIONS ***********************************************	
 
 function trace(s, c, bg) {
 	var style;
@@ -105,10 +141,8 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 			// width: button.w + 10,
 			// height: button.h + 10,
 			alpha: 1
-		}, 200, Phaser.Easing.Quadratic.Out, true);
-		//button.alpha = 1;
-		button.label.tint = 0x000000;
-		// if(button.icon) button.icon.tint = 0x000000;
+		}, 200, Phaser.Easing.Quadratic.Out, true);		
+		button.label.tint = 0x000000;		
 		
 	}, this);
 	button.events.onInputOut.add(function() {
@@ -132,18 +166,66 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 
 function createCopyright() {
 
-	// add copyright text
-	var text = "© Brotalk";
-	var c = Vent.game.add.text(Vent.game.width - 10, Vent.game.height, text, copyright_style);
+	// add copyright text	
+	var c = Vent.game.add.text(Vent.game.width - 10, Vent.game.height, copyright_txt, copyright_style);
 	c.anchor.set(1, 1);
 
-	// release
-	text = "BETA"; // .July.30.2015";
-	var release = Vent.game.add.text(10, Vent.game.height, text, copyright_style);
+	// release	
+	var release = Vent.game.add.text(10, Vent.game.height, release_txt, copyright_style);
 	release.anchor.set(0,1);
+
+	// soundBt
+	var soundBt = Vent.game.add.sprite(Vent.game.width / 2 - 40, 29, "square");
+	createBt(soundBt, "icon-note", false, "circle");
+	soundBt.events.onInputUp.add(function() {
+		soundToggle();
+	});	
+
+	// fullscreenBt
+	var fullscreenBt = Vent.game.add.sprite(Vent.game.width / 2 + 40, 29, "square");
+	createBt(fullscreenBt, "icon-expand", false, "circle");
+	fullscreenBt.events.onInputUp.add(function() {
+		fullscreenToggle();
+	});	
 }
 
 function openInNewTab(url) {
 	var win = window.top.open(url, '_blank');
 	win.focus();
+}
+
+function soundToggle() {
+
+	if (!settings.SOUND_ON) {
+		settings.SOUND_ON = true;
+		settings.VOLUME = 0.2;
+		Phaser.game.VOLUME = 1;
+	} else {
+		settings.SOUND_ON = false,
+		settings.VOLUME = 0;
+		Phaser.game.VOLUME = 0;
+	}
+}
+
+function fullscreenToggle() {
+
+	if (!settings.FULLSCREEN) {
+
+		settings.FULLSCREEN = true;
+		settings.FRAME_WIDTH = settings.FRAME.style.width;
+		settings.FRAME_HEIGHT = settings.FRAME.style.height;
+
+		settings.FRAME.style.zindex = 500;
+		settings.FRAME.style.position = "absolute";
+		settings.FRAME.style.width = window.innerWidth + "px";
+		settings.FRAME.style.height = window.innerHeight + "px";
+
+	} else {
+		settings.FULLSCREEN = false;
+
+		settings.FRAME.style.zindex = 1;
+		settings.FRAME.style.position = "relative";
+		settings.FRAME.style.width = settings.FRAME_WIDTH;
+		settings.FRAME.style.height = settings.FRAME_HEIGHT;
+	}
 }

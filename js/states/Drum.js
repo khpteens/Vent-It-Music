@@ -11,9 +11,6 @@ Vent.Drum = function() {};
 var COLOUR_WHITE = 0xffffff,
 	COLOUR_BLACK = 0x000000;
 
-var GAME_SOUND_ON = true,
-	GAME_VOLUME = 0.2;
-
 var hitTotal = 0,
 	trail = null, // mouse trail particle emitter
 	trailOn = false,
@@ -73,16 +70,12 @@ Vent.Drum.prototype = {
 		bgGame.bringToTop();	
 
 		createCopyright();
-
-		createDrumAudio();
-		// createDrumVisualization();
-
+		createDrumAudio();	
 		createDrumUI();
 
 		pop = Vent.game.add.sprite(Vent.game.width / 2, Vent.game.height / 2, "circle");
 		pop.alpha = 0;
 		bg_drum_group.add(pop);
-
 
 		// Continue prompt
 		var text = "Click the drums";
@@ -102,7 +95,7 @@ Vent.Drum.prototype = {
 };
 
 function createDrumWorldSettings() {
-	Vent.game.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+	Vent.game.world.setBounds(0, 0, settings.WIDTH, settings.HEIGHT);
 	Vent.game.stage.backgroundColor = 0x222222;
 }
 
@@ -213,9 +206,9 @@ function createDrum(button) {
 		var myTint = Math.random() * 0xffffff;
 		// var myTint = brandColours[Math.floor(Math.random() * brandColours.length)];
 
+		button.tint = myTint;
 		button.width = button.w * 0.5;
 		button.height = button.h * 0.5;
-		button.tint = myTint;
 		Vent.game.add.tween(button).to({
 			width: button.w,
 			height: button.h,
@@ -260,75 +253,11 @@ function createDrumVisualization() {
 
 function playDrumAudio(mysound) {
 
-	start_bg_bounce_tween();
-
-	if (GAME_SOUND_ON && GAME_VOLUME > 0) {
-		// var rand = Math.random() * 0.5 - 0.25;
-		mysound.volume = GAME_VOLUME * 10;
+	if (settings.SOUND_ON && settings.VOLUME > 0) {		
 		mysound.play();
 		mysound.frame = 0;
-
 		playing.push(mysound);
 	}
-}
-
-function analyseAudio() {
-
-	if (volumes.length <= audioLength) {
-
-		// update data in frequencyData
-		Vent.game.analyser.getByteFrequencyData(Vent.game.frequencyData);
-
-		// render frame based on values in frequencyData            
-		getAverageVolume(Vent.game.frequencyData);
-
-		if (volumes.length == audioLength) {
-			save_audio_data();
-		}
-	}
-}
-
-function getAverageVolume(array) {
-
-	var values = 0;
-	var average;
-
-	var length = array.length;
-
-	// get all the frequency amplitudes
-	for (var i = 0; i < length; i++) {
-		values += array[i];
-	}
-
-	average = values / length;
-
-	volumes.push(Number(values));
-	averages.push(Number(average.toFixed(2)));
-	if (average != 0) {
-		all.push(JSON.stringify(array));
-	} else {
-		all.push("0");
-	}
-
-	// return values;
-}
-
-function save_audio_data() {
-
-	var jqxhr = $.ajax({
-			type: "post",
-			url: "save.php",
-			data: "fileName=" + audioFileName + "&averages=" + averages + "&volumes=" + volumes + "&all=" + all
-		})
-		.done(function() {
-			trace("success");
-		})
-		.fail(function() {
-			trace("error");
-		})
-		.always(function() {
-			trace("complete");
-		});
 }
 
 function drumExit() {
@@ -409,53 +338,6 @@ function updateDrumVisualization() {
 
 	}
 	add_audio_bar(total);
-}
-
-function add_audio_bar(v) {
-
-	var scaleMod = 2,
-		shift = 0;
-
-	var curY = v * scaleMod,
-		curX = barTotal;
-	if (lastY == 0 && lastX == 0) {
-		lastY = curY;
-	}
-
-	var bar = Vent.game.add.sprite(curX, Vent.game.height + shift, "square");
-	bar.width = 3;
-	bar.height = curY;
-	bar.anchor.set(0, 1);
-	bar.tint = 0x777777;
-	bars.push(bar);
-	bars_group.add(bar);
-
-	var line = Vent.game.add.graphics(0, 0);
-	line.lineStyle(3, 0xffffff, 1);
-	line.moveTo(lastX, Vent.game.height + shift - lastY);
-	line.lineTo(curX, Vent.game.height + shift - curY);
-	bars.push(line);
-	bars_group.add(line);
-
-	if (barTotal < Vent.game.width) {
-		barTotal += 5;
-		lastX = curX;
-		lastY = curY;
-	} else {
-		bars_reset();
-		lastX = 0;
-		lastY = 0;
-	}
-}
-
-function bars_reset() {
-	barTotal = 0;
-	for (var i = 0, len = bars.length; i < len; i++) {
-		bars[i].destroy();
-	}
-	bars = [];
-	lastY = 0;
-	lastX = 0;
 }
 
 function cleanPlayVisual() {

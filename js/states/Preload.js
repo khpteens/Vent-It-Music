@@ -55,9 +55,13 @@ Vent.Preload.prototype = {
 		this.load.image('emoji2', 'assets/img/emoji2.png');
 		this.load.image('emoji3', 'assets/img/emoji3.png');
 		this.load.image('emoji4', 'assets/img/emoji4.png');	
-		this.load.image('icon-phone', 'assets/img/phone.png');	
-		this.load.image('icon-chat', 'assets/img/chat.png');		
-		this.load.image('icon-x', 'assets/img/x.png');	
+		this.load.image('icon-phone', 'assets/img/i/phone.png');	
+		this.load.image('icon-chat', 'assets/img/i/chat.png');		
+		this.load.image('icon-x', 'assets/img/i/x.png');	
+		this.load.image('icon-note', 'assets/img/i/note.png');
+		this.load.image('icon-speaker', 'assets/img/i/speaker.png');
+		this.load.image('icon-expand', 'assets/img/i/expand.png');
+		this.load.image('icon-contract', 'assets/img/i/contract.png');
 
 		// Audio        
 		this.load.audio('chord1', ['assets/audio/guitar/guitar-power-a2-short.mp3','assets/audio/guitar/guitar-power-a2-short.ogg']);
