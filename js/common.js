@@ -142,6 +142,7 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 
 	if (target_state != false && target_state != undefined) {
 		button.events.onInputUp.add(function() {
+			// Vent.game.state.start(target_state);
 			Vent.game.stateTransition.to(target_state);
 		}, this);
 	}
@@ -235,7 +236,7 @@ function fullscreenToggle() {
 
 	if (!settings.FULLSCREEN) {
 
-		settings.FULLSCREEN = true;
+		settings.FULLSCREEN = true;		
 		settings.FRAME_WIDTH = settings.FRAME.style.width;
 		settings.FRAME_HEIGHT = settings.FRAME.style.height;
 
