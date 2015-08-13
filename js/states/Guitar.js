@@ -64,9 +64,9 @@ Vent.Guitar.prototype = {
 		bgGame = this.game.add.sprite(this.game.width / 2, this.game.height / 2, "crowd");
 		bgGame.width = this.game.world.width;
 		bgGame.height = this.game.world.height;
-		bgGame.scale.set(1.2);		
-		bgGame.anchor.set(0.5);		
-		bg_guitar_group.add(bgGame);	
+		bgGame.scale.set(1.2);
+		bgGame.anchor.set(0.5);
+		bg_guitar_group.add(bgGame);
 		bgGame.bringToTop();
 
 		createCopyright();
@@ -80,22 +80,50 @@ Vent.Guitar.prototype = {
 		pop.alpha = 0;
 		bg_guitar_group.add(pop);
 
-		// Continue prompt
-		var text = "Click the guitar to shred";
-		if (hasTouch) text = "Tap the guitar to shred";
-		var prompt = this.game.add.text(this.game.width / 2, this.game.height / 2 + 200, text, p_style);
-		prompt.anchor.set(0.5);
-		setTimeout(function() {
-			Vent.game.add.tween(prompt).to({
-				alpha: 0
-			}, 1500, Phaser.Easing.Cubic.Out, true);
-		}, 4000);
+		create_guitar_prompt();
 	},
 	update: function() {},
 	render: function() {
 		// this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
 	}
 };
+
+function create_guitar_prompt() {
+
+	var guitarPrompt = Vent.game.add.group();
+
+	var clickblock = Vent.game.add.graphics(0,0);
+	clickblock.inputEnabled = true;
+	clickblock.beginFill(0x000000, 1);
+	clickblock.boundsPadding = 0;
+	clickblock.drawRect(0, 0, Vent.game.width, Vent.game.height - 30);
+	clickblock.alpha = 0;
+	guitarPrompt.add(clickblock);
+
+	var overlay = Vent.game.add.graphics(0, 0);	
+	overlay.beginFill(0x000000, 1);
+	overlay.boundsPadding = 0;
+	overlay.drawRect(0, Vent.game.height / 2-100, Vent.game.width, 200);
+	overlay.alpha = 0.5;	
+	guitarPrompt.add(overlay);
+
+	// Instruction prompt   
+	text = "Click the guitar to shred";
+	if (hasTouch) text = "Tap the guitar to shred";
+	winText = Vent.game.add.text(settings.WIDTH / 2, settings.HEIGHT / 2 - 40, text, h3_style_bold);
+	winText.anchor.set(0.5);
+	guitarPrompt.add(winText);
+
+	// Continue button
+	ContinueBt = Vent.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 30, 'square');
+	createBt(ContinueBt, "Continue", false);
+	ContinueBt.events.onInputUp.add(function() {
+		guitarPrompt.visible = false;
+	}, this);
+	guitarPrompt.add(ContinueBt.group);
+
+	guitarPrompt.bringToTop = true;
+}
 
 function start_bg_bounce_tween() {
 
@@ -104,7 +132,7 @@ function start_bg_bounce_tween() {
 	bgGame.y = Vent.game.height / 2;
 
 	bounce.to({
-		y: Vent.game.world.height / 2  + (Math.random()*200-100)
+		y: Vent.game.world.height / 2 + (Math.random() * 200 - 100)
 	}, 100, Phaser.Easing.Quadratic.In);
 	bounce.onComplete.addOnce(back_bg_bounce_tween, this);
 	bounce.start();
@@ -128,7 +156,7 @@ function start_guitar_bounce_tween() {
 	guitar.y = Vent.game.height / 2;
 
 	bounce_guitar.to({
-		y: Vent.game.world.height / 2 + (Math.random()*100-50)
+		y: Vent.game.world.height / 2 + (Math.random() * 100 - 50)
 	}, 100, Phaser.Easing.Quadratic.In);
 	bounce_guitar.onComplete.addOnce(back_guitar_bounce_tween, this);
 	bounce_guitar.start();
@@ -140,7 +168,7 @@ function back_guitar_bounce_tween() {
 
 	bounce_guitar.to({
 		y: Vent.game.world.height / 2
-	}, 400, Phaser.Easing.Bounce.Out);	
+	}, 400, Phaser.Easing.Bounce.Out);
 	bounce_guitar.start();
 }
 
@@ -181,7 +209,7 @@ function createGuitarInputListeners() {
 		} else if (swipeCoordY2 > swipeCoordY + swipeMinDistance) {
 			// console.log("down");
 		}
-		
+
 	}, this);
 }
 
@@ -210,7 +238,7 @@ function createFrets() {
 	createFret(f1);
 	f1.events.onInputDown.add(function() {
 		playGuitarAudio(chord4);
-	});	
+	});
 	buttons.add(f1);
 
 	var f2 = Vent.game.add.sprite(Vent.game.width / 4, Vent.game.height / 2, "square");
@@ -267,7 +295,7 @@ function createFret(button) {
 
 		var myTint = Math.random() * 0xffffff;
 		// var myTint = brandColours[Math.floor(Math.random() * brandColours.length)];
-		
+
 		button.tint = myTint;
 
 		button.height = Vent.game.height;
@@ -365,12 +393,12 @@ function createGuitarAudio() {
 	chord3 = Vent.game.add.audio('chord3');
 	chord4 = Vent.game.add.audio('chord4');
 	chord5 = Vent.game.add.audio('chord5');
-	
-	drumLoop = Vent.game.add.audio('drumLoop');	
+
+	drumLoop = Vent.game.add.audio('drumLoop');
 	drumLoop.loop = true;
 	drumLoop.volume = settings.VOLUME;
 	drumLoop.play();
-	settings.LOOP = drumLoop;	
+	settings.LOOP = drumLoop;
 }
 
 function createGuitarVisualization() {
@@ -386,7 +414,7 @@ function createGuitarVisualization() {
 	bg_guitar_group.add(sb);
 
 	// create a group to keep all bars at the same depth
-	bars_group = Vent.game.add.group();	
+	bars_group = Vent.game.add.group();
 }
 
 function playGuitarAudio(mysound) {
@@ -394,7 +422,7 @@ function playGuitarAudio(mysound) {
 	start_bg_bounce_tween();
 	start_guitar_bounce_tween();
 
-	if (settings.SOUND_ON && settings.VOLUME > 0) {		
+	if (settings.SOUND_ON && settings.VOLUME > 0) {
 		mysound.play();
 		mysound.frame = 0;
 		// playing.push(mysound);
@@ -413,10 +441,14 @@ function guitarExit() {
 
 		// reset game
 		hitTotal = 0;
-		destroyAllHits();		
+		destroyAllHits();
 
 		// go to Finish screen
-		Vent.game.stateTransition.to("Finish");
+		if (!hasTouch) {
+			Vent.game.stateTransition.to("Finish");
+		} else {
+			Vent.game.state.start("Finish");
+		}
 
 	}, 500);
 }
@@ -643,7 +675,7 @@ function updateGuitarVisualization() {
 		cleanPlayVisual();
 
 		var scaleMod = 1 / 2,
-			alphaMod = 1 / 100;		
+			alphaMod = 1 / 100;
 
 	}
 	add_audio_bar(total);

@@ -89,7 +89,7 @@ Vent.Preload.prototype = {
 			},
 			//  The Google Fonts we want to load (specify as many as you like in the array)
 			google: {
-				families: ['Open+Sans:300,400,700:latin']
+				families: ['Open+Sans:300,400,700:latin','Lobster::latin']
 			}
 		};
 		this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
@@ -141,7 +141,7 @@ function createStyles() {
 		align: "center"
 	};
 	h3_style_bold = {
-		font: "700 25px Open Sans",
+		font: "300 35px Lobster",
 		fill: white,
 		align: "center"
 	};

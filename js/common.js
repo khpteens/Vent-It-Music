@@ -142,15 +142,18 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 
 	if (target_state != false && target_state != undefined) {
 		button.events.onInputUp.add(function() {
-			// Vent.game.state.start(target_state);
-			Vent.game.stateTransition.to(target_state);
+			
+			if(!hasTouch){
+				Vent.game.stateTransition.to(target_state);
+			}else{
+				Vent.game.state.start(target_state);
+			}
+			
 		}, this);
 	}
 	button.events.onInputOver.add(function() {
-		// button.tint = isDownColour;		
-		Vent.game.add.tween(button).to({
-			// width: button.w + 10,
-			// height: button.h + 10,
+		
+		Vent.game.add.tween(button).to({			
 			alpha: 1
 		}, 200, Phaser.Easing.Quadratic.Out, true);
 		button.label.tint = 0x000000;

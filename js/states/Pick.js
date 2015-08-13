@@ -26,20 +26,12 @@ Vent.Pick.prototype = {
 		// bt "Just a few"
 		text = "Shred on guitar";
 		var aFewBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 50, "square");
-		createBt(aFewBt, text, false, false, "emoji1");
-		aFewBt.events.onInputUp.add(function() {
-			hitGoal = 10;
-			Vent.game.stateTransition.to('Guitar');
-		}, this);
+		createBt(aFewBt, text, "Guitar", false, "emoji1");		
 
 		// bt "A lot"
 		text = "Bang the drums";
 		var aLotBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 110, "square");
-		createBt(aLotBt, text, false, false, "emoji2");
-		aLotBt.events.onInputUp.add(function() {
-			hitGoal = 50;
-			Vent.game.stateTransition.to('Drum');
-		}, this);
+		createBt(aLotBt, text, "Drum", false, "emoji2");		
 
 	},
 	update: function() {

@@ -71,7 +71,7 @@ Vent.Drum.prototype = {
 		bg_drum_group.add(bgGame);
 		bgGame.bringToTop();
 
-		createCopyright();
+
 		createDrumAudio();
 		createDrumUI();
 
@@ -80,21 +80,52 @@ Vent.Drum.prototype = {
 		bg_drum_group.add(pop);
 
 		// Continue prompt
-		var text = "Click the drums";
-		if (hasTouch) text = "Tap the drums";
-		var prompt = this.game.add.text(this.game.width / 2, this.game.height / 2 + 10, text, p_style);
-		prompt.anchor.set(0.5);
-		setTimeout(function() {
-			Vent.game.add.tween(prompt).to({
-				alpha: 0
-			}, 1500, Phaser.Easing.Cubic.Out, true);
-		}, 4000);
+		create_drum_prompt();
+
+		createCopyright();
 	},
 	update: function() {},
 	render: function() {
 		// this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
 	}
 };
+
+function create_drum_prompt() {
+
+	var drumPrompt = Vent.game.add.group();
+
+	var clickblock = Vent.game.add.graphics(0, 0);
+	clickblock.inputEnabled = true;
+	clickblock.beginFill(0x000000, 1);
+	clickblock.boundsPadding = 0;
+	clickblock.drawRect(0, 0, Vent.game.width, Vent.game.height);
+	clickblock.alpha = 0;
+	drumPrompt.add(clickblock);
+
+	var overlay = Vent.game.add.graphics(0, 0);
+	overlay.beginFill(0x000000, 1);
+	overlay.boundsPadding = 0;
+	overlay.drawRect(0, Vent.game.height / 2 - 100, Vent.game.width, 200);
+	overlay.alpha = 0.5;
+	drumPrompt.add(overlay);
+
+	// Instruction prompt   
+	text = "Click the drums";
+	if (hasTouch) text = "Tap the drums";
+	winText = Vent.game.add.text(settings.WIDTH / 2, settings.HEIGHT / 2 - 40, text, h3_style_bold);
+	winText.anchor.set(0.5);
+	drumPrompt.add(winText);
+
+	// Continue button
+	ContinueBt = Vent.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 30, 'square');
+	createBt(ContinueBt, "Continue", false);
+	ContinueBt.events.onInputUp.add(function() {
+		drumPrompt.visible = false;
+	}, this);
+	drumPrompt.add(ContinueBt.group);
+
+	drumPrompt.bringToTop = true;
+}
 
 function createDrumWorldSettings() {
 	Vent.game.world.setBounds(0, 0, settings.WIDTH, settings.HEIGHT);
@@ -149,7 +180,7 @@ function createDrumButtons() {
 	createDrums();
 }
 
-function createDrums() {	
+function createDrums() {
 
 	var d2 = Vent.game.add.sprite(Vent.game.width / 2 - 75, Vent.game.height / 2 + 75, "drum-snare");
 	createDrum(d2);
@@ -167,7 +198,7 @@ function createDrums() {
 	});
 	buttons.add(d3);
 
-	var d4 = Vent.game.add.sprite(Vent.game.width / 2 + 75, Vent.game.width / 2 + 120, "drum-large");
+	var d4 = Vent.game.add.sprite(Vent.game.width / 2 + 75, Vent.game.height / 2 + 80, "drum-large");
 	createDrum(d4);
 	d4.anchor.set(0.25);
 	d4.events.onInputDown.add(function() {
@@ -237,7 +268,7 @@ function createStickAnimation(x, y) {
 
 	stick.visible = true;
 
-	if(drumswing) drumswing.stop();
+	if (drumswing) drumswing.stop();
 
 	if (x <= Vent.game.width / 2) {
 		stick.scale.set(-0.75);
@@ -314,7 +345,11 @@ function drumExit() {
 		destroyAllHits();
 
 		// go to Finish screen
-		Vent.game.stateTransition.to("Finish");
+		if (!hasTouch) {
+			Vent.game.stateTransition.to("Finish");
+		} else {
+			Vent.game.state.start("Finish");
+		}
 
 	}, 500);
 }
