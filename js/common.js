@@ -4,9 +4,10 @@
 
 var settings = {
 	"WIDTH": 500,
-	"HEIGHT": undefined,
-	"RATIO": window.innerHeight / window.innerWidth,
-	"RATIO_MIN": 1.2,
+	"HEIGHT": undefined,	
+	"RATIO": window.outerHeight / window.outerWidth,
+	"RATIO_MIN": 1.1,
+	"RATIO_MAX": 1.6,
 
 	"PAUSED": false,
 
@@ -26,13 +27,15 @@ var settings = {
 };
 
 if (settings.RATIO <= settings.RATIO_MIN) {
-	settings.RATIO = settings.RATIO_MIN; // widest is square, no limit to height
+	settings.RATIO = settings.RATIO_MIN; // shortest is 500px by 550px
+}else if(settings.RATIO > settings.RATIO_MAX){
+	settings.RATIO = settings.RATIO_MAX; // tallest is 500px by 800px, 
 }
 
 settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
 var copyright_txt = "© BroTalk",
-	release_txt = "RC.Aug.12.2015";
+	release_txt = "RC.Aug.31.2015";
 
 
 // FUNCTIONS ***********************************************	
@@ -142,31 +145,31 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 
 	if (target_state != false && target_state != undefined) {
 		button.events.onInputUp.add(function() {
-			
-			if(!hasTouch){
+
+			if (!hasTouch) {
 				Vent.game.stateTransition.to(target_state);
-			}else{
+			} else {
 				Vent.game.state.start(target_state);
 			}
-			
+
 		}, this);
 	}
 	button.events.onInputOver.add(function() {
-		
-		Vent.game.add.tween(button).to({			
+
+		Vent.game.add.tween(button).to({
 			alpha: 1
 		}, 200, Phaser.Easing.Quadratic.Out, true);
 		button.label.tint = 0x000000;
 
 	}, this);
 	button.events.onInputOut.add(function() {
-		
-		Vent.game.add.tween(button).to({		
+
+		Vent.game.add.tween(button).to({
 			alpha: 0
 		}, 200, Phaser.Easing.Quadratic.In, true);
-		
-		button.label.tint = 0xffffff;		
-		
+
+		button.label.tint = 0xffffff;
+
 	}, this);
 	button.events.onInputDown.add(function() {
 		button.tint = 0x4ac7eb;
@@ -239,7 +242,7 @@ function fullscreenToggle() {
 
 	if (!settings.FULLSCREEN) {
 
-		settings.FULLSCREEN = true;		
+		settings.FULLSCREEN = true;
 		settings.FRAME_WIDTH = settings.FRAME.style.width;
 		settings.FRAME_HEIGHT = settings.FRAME.style.height;
 

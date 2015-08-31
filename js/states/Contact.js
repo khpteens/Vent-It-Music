@@ -13,19 +13,19 @@ Vent.Contact.prototype = {
 		createCopyright();
 
 		var text = "Got something on your mind\nthat keeps playing over and over?";
-		var t = this.game.add.text(this.game.width / 2, this.game.height / 2 - 160, text, h3_style);
+		var t = this.game.add.text(this.game.width / 2, this.game.height / 2 - 180, text, h3_style);
 		t.anchor.set(0.5);
 
-		var messageButtonH = this.game.height / 2 - 30,
-			phoneButtonH = this.game.height / 2 + 30;
+		var messageButtonH = this.game.height / 2 - 50,
+			phoneButtonH = this.game.height / 2 + 10;
 
 		// Live Chat
 		if (chatOpen) {
 			text = chatOpen_txt[0];			
 		} else {
 			text = chatClosed_txt[0];
-			messageButtonH = this.game.height / 2 + 30,
-			phoneButtonH = this.game.height / 2 - 30;
+			messageButtonH = this.game.height / 2 + 10,
+			phoneButtonH = this.game.height / 2 - 50;
 		}
 		var MessageBt = this.game.add.sprite(this.game.width / 2, messageButtonH, "square");
 		createBt(MessageBt, text, false, false, "icon-chat");
@@ -43,14 +43,14 @@ Vent.Contact.prototype = {
 
 		// More info
 		text = counsellor_txt[0];
-		var PhoneBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 90, "square");
+		var PhoneBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 70, "square");
 		createBt(PhoneBt, text, false);
 		PhoneBt.events.onInputUp.add(function() {
 			moreAbout();
 		}, this);
 
 		// Phone
-		var BackBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 210, "square");
+		var BackBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 190, "square");
 		createBt(BackBt, "Main menu", "MainMenu");
 
 	},
