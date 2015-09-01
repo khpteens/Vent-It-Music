@@ -3,14 +3,17 @@
 // VARIABLES ***********************************************
 
 var settings = {
+	"NAME": "Vent It Music",
+
 	"WIDTH": 500,
 	"HEIGHT": undefined,	
 	"RATIO": window.outerHeight / window.outerWidth,
 	"RATIO_MIN": 1.1,
-	"RATIO_MAX": 1.6,
+	"RATIO_MAX": 1.4,
 
 	"PAUSED": false,
 
+	"GA_CODE": "UA-66839321-1",
 	"ANALYTICS_ON": false,
 
 	"SOUND_ON": true,
@@ -35,7 +38,7 @@ if (settings.RATIO <= settings.RATIO_MIN) {
 settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
 var copyright_txt = "© BroTalk",
-	release_txt = "RC.Aug.31.2015";
+	release_txt = "Release Candidate | Sept.1.2015";
 
 
 // FUNCTIONS ***********************************************	
@@ -196,8 +199,9 @@ function createCopyright() {
 	c.anchor.set(1, 1);
 
 	// release	
-	var release = Vent.game.add.text(10, Vent.game.height - 3, release_txt, copyright_style);
-	release.anchor.set(0, 1);
+	// var release = Vent.game.add.text(10, Vent.game.height - 3, release_txt, copyright_style);
+	// release.anchor.set(0, 1);
+	trace(settings.NAME + " | " + release_txt)
 
 	createSoundScreenToggles();
 }

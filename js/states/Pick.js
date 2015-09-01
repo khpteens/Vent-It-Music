@@ -26,7 +26,7 @@ Vent.Pick.prototype = {
 		// bt "Just a few"
 		text = "Shred on guitar";
 		var aFewBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 50, "square");
-		createBt(aFewBt, text, "Guitar", false, "emoji1");		
+		createBt(aFewBt, text, "Guitar", false, "emoji1");				
 
 		// bt "A lot"
 		text = "Bang the drums";
