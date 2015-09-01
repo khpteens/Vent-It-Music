@@ -144,8 +144,7 @@ function back_bg_bounce_tween() {
 
 	bounce.to({
 		y: Vent.game.world.height / 2
-	}, 400, Phaser.Easing.Bounce.Out);
-	// bounce.onComplete.add(start_bg_bounce_tween, this);
+	}, 400, Phaser.Easing.Bounce.Out);	
 	bounce.start();
 }
 
@@ -179,10 +178,7 @@ function createGuitarWorldSettings() {
 
 function createGuitarUI() {
 	createGuitarInputListeners();
-	createGuitarButtons();
-
-	// hitGoal_txt = Vent.game.add.text(50, 50, hitGoal, h3_style);
-	// hitGoal_txt.anchor.set(0.5);
+	createGuitarButtons();	
 }
 
 function createGuitarInputListeners() {
@@ -260,14 +256,7 @@ function createFrets() {
 	f4.events.onInputDown.add(function() {
 		playGuitarAudio(chord1);
 	});
-	buttons.add(f4);
-
-	// var f5 = Vent.game.add.sprite(Vent.game.width / 5 * 4, Vent.game.height / 2, "square");
-	// createFret(f5);
-	// f5.events.onInputDown.add(function() {
-	// 	playGuitarAudio(chord1);
-	// });
-	// buttons.add(f5);
+	buttons.add(f4);	
 }
 
 function createFret(button) {
@@ -290,11 +279,9 @@ function createFret(button) {
 		button.alpha = 0;
 	});
 
-	button.events.onInputDown.add(function() {
-		//button.width = button.w / 2;
+	button.events.onInputDown.add(function() {		
 
-		var myTint = Math.random() * 0xffffff;
-		// var myTint = brandColours[Math.floor(Math.random() * brandColours.length)];
+		var myTint = Math.random() * 0xffffff;		
 
 		button.tint = myTint;
 
@@ -310,8 +297,7 @@ function createFret(button) {
 	});
 
 	button.events.onInputUp.add(function() {
-		button.alpha = 1;
-		// button.tint = 0xffffff;
+		button.alpha = 1;		
 	});
 }
 
@@ -547,23 +533,6 @@ function createBall(x, y) {
 	em.setRotation(0, 180, 3000); // (start rotation, end rotation, duration, ease) default is (0, 360)
 
 	em.gravity = 400; // default is 0;
-
-
-
-	/* AWAY FROM USER 
-
-	// SCALE
-	// Linear (no in, etc.), Quadratic, Cubic, Quartic, Quintic, Sinusoidal, Exponential, Circular, Elastic, Back, Bounce
-	em.setScale(1, 0, 1, 0, 3000, Phaser.Easing.Cubic.Out); // (x start, x end, y start, y end, animation duration, Type of ease)    
-
-	em.minParticleSpeed.setTo(-200, -800);  // x speed, y speed
-	em.maxParticleSpeed.setTo(200, -500);    // x speed, y speed
-
-	em.setRotation(-180, 180, 3000); // (start rotation, end rotation, duration, ease) default is (0, 360)
-
-	em.gravity = 900; // default is 0;
-	*/
-
 
 	// START
 	// 1. set the effect to "explode" which means all particles are emitted at once
