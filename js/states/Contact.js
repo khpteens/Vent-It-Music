@@ -30,6 +30,7 @@ Vent.Contact.prototype = {
 		var MessageBt = this.game.add.sprite(this.game.width / 2, messageButtonH, "square");
 		createBt(MessageBt, text, false, false, "icon-chat");
 		MessageBt.events.onInputUp.add(function() {
+			trackEvent("Message a Counsellor clicked", Vent.game.state.getCurrentState().key+" screen");
 			message_brotalk();
 		}, this);
 
@@ -38,6 +39,7 @@ Vent.Contact.prototype = {
 		var PhoneBt = this.game.add.sprite(this.game.width / 2, phoneButtonH, "square");
 		createBt(PhoneBt, text, false, false, "icon-phone");
 		PhoneBt.events.onInputUp.add(function() {
+			trackEvent("Phone a Counsellor clicked", Vent.game.state.getCurrentState().key+" screen");
 			phone_brotalk();
 		}, this);
 
@@ -46,6 +48,7 @@ Vent.Contact.prototype = {
 		var PhoneBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 70, "square");
 		createBt(PhoneBt, text, false);
 		PhoneBt.events.onInputUp.add(function() {
+			trackEvent("Learn About Counsellors clicked", Vent.game.state.getCurrentState().key+" screen");
 			moreAbout();
 		}, this);
 
@@ -60,6 +63,7 @@ Vent.Contact.prototype = {
 function phone_brotalk() {
 	var r = confirm("Are you sure you want to dial Kids Help Phone's number?");
 	if (r === true) {
+		trackEvent("Phone a Counsellor confirmed", Vent.game.state.getCurrentState().key+" screen");
 		window.location = phone_url;
 	} else {
 		// do nothing if cancel is pressed
@@ -69,6 +73,7 @@ function phone_brotalk() {
 function message_brotalk() {
 	var r = confirm("Are you sure you want to leave this page?");
 	if (r === true) {
+		trackEvent("Message a Counsellor confirmed", Vent.game.state.getCurrentState().key+" screen");
 		openInNewTab(chat_url);
 	} else {
 		// do nothing if cancel is pressed
@@ -78,6 +83,7 @@ function message_brotalk() {
 function moreAbout() {
 	var r = confirm("Are you sure you want to leave this page?");
 	if (r === true) {
+		trackEvent("Learn About Counsellors confirmed", Vent.game.state.getCurrentState().key+" screen");
 		openInNewTab(counsellor_url);
 	} else {
 		// do nothing if cancel is pressed
