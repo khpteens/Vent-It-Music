@@ -38,7 +38,8 @@ if (settings.RATIO <= settings.RATIO_MIN) {
 settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
 var copyright_txt = "© BroTalk",
-	release_txt = "Release Candidate | Sept.1.2015";
+	release_txt = "Release Candidate | Sept.1.2015",
+	soundBt, fullscreenBt;
 
 trace(settings.NAME + " | " + release_txt);
 
@@ -210,15 +211,17 @@ function createCopyright() {
 function createSoundScreenToggles() {
 
 	// soundBt
-	var soundBt = Vent.game.add.sprite(Vent.game.width - 45, Vent.game.height - 15, "square");
-	createBt(soundBt, "icon-note", false, "square-small");
+	soundBt = Vent.game.add.sprite(Vent.game.width - 45, Vent.game.height - 15, "square");
+	createBt(soundBt, "icon-sound", false, "square-small");
+	if(!settings.SOUND_ON) soundBt.label.frame = 1;
 	soundBt.events.onInputUp.add(function() {
 		soundToggle();
 	});
 
 	// fullscreenBt
-	var fullscreenBt = Vent.game.add.sprite(Vent.game.width - 15, Vent.game.height - 15, "square");
-	createBt(fullscreenBt, "icon-expand", false, "square-small");
+	fullscreenBt = Vent.game.add.sprite(Vent.game.width - 15, Vent.game.height - 15, "square");
+	createBt(fullscreenBt, "icon-fullscreen", false, "square-small");
+	if(settings.FULLSCREEN) fullscreenBt.label.frame = 1;
 	fullscreenBt.events.onInputUp.add(function() {
 		fullscreenToggle();
 	});
@@ -234,9 +237,11 @@ function soundToggle() {
 	if (!settings.SOUND_ON) {
 		settings.SOUND_ON = true;
 		settings.VOLUME = 0.5;
+		soundBt.label.frame = 0;
 	} else {
 		settings.SOUND_ON = false;
 		settings.VOLUME = 0;
+		soundBt.label.frame = 1;
 	}
 
 	if (guitarLoop != undefined) guitarLoop.volume = settings.VOLUME;
@@ -256,6 +261,8 @@ function fullscreenToggle() {
 		settings.FRAME.style.width = window.innerWidth + "px";
 		settings.FRAME.style.height = window.innerHeight + "px";
 
+		fullscreenBt.label.frame = 1;
+
 	} else {
 		settings.FULLSCREEN = false;
 
@@ -263,5 +270,7 @@ function fullscreenToggle() {
 		settings.FRAME.style.position = "relative";
 		settings.FRAME.style.width = settings.FRAME_WIDTH;
 		settings.FRAME.style.height = settings.FRAME_HEIGHT;
+
+		fullscreenBt.label.frame = 0;
 	}
 }

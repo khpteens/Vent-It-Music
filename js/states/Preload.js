@@ -40,6 +40,10 @@ Vent.Preload.prototype = {
 		// wordmark
 		this.load.image('wordmark', 'assets/img/wordmark.png');
 
+		// spritesheets
+		this.load.spritesheet('icon-sound', 'assets/img/i/soundOnOff.png', 60, 60);
+		this.load.spritesheet('icon-fullscreen', 'assets/img/i/expand-contract.png', 60, 60);
+
 		// sprites			
 		this.load.image('guitar', 'assets/img/guitar.png');
 		this.load.image('crowd', 'assets/img/music-bg.jpg');
